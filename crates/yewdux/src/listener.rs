@@ -9,8 +9,8 @@ pub trait Listener: 'static {
     fn on_change(&mut self, state: Rc<Self::Store>);
 }
 
-struct ListenerStore<S: Store>(Option<SubscriberId<S>>);
-impl<S: Store> Store for Mrc<ListenerStore<S>> {
+struct ListenerStore<L : Listener>(Option<SubscriberId<L::Store>>);
+impl<L : Listener> Store for Mrc<ListenerStore<L>> {
     fn new() -> Self {
         ListenerStore(None).into()
     }
@@ -28,7 +28,7 @@ pub fn init_listener<L: Listener>(listener: L) {
         dispatch::subscribe_silent(move |state| listener.borrow_mut().on_change(state))
     };
 
-    dispatch::reduce_mut(|state: &mut Mrc<ListenerStore<L::Store>>| {
+    dispatch::reduce_mut(|state: &mut Mrc<ListenerStore<L>>| {
         state.borrow_mut().0 = Some(id)
     });
 }
