@@ -1,0 +1,12 @@
+[package]
+name = "multiple_listeners"
+version = "0.1.0"
+authors = ["Mark Wainwright"]
+edition = "2021"
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+serde = { version = "1.0.114" }
+wasm-logger = "0.2.0"
+yew = { git = "https://github.com/yewstack/yew.git", features = ["csr"] }
+yewdux = { path = "../../crates/yewdux" }
